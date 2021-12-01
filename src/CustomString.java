@@ -1,78 +1,45 @@
 public final class CustomString {
 
-  private final String str;
+  private final char[] charArray;
 
-  public CustomString(String str) {
-    this.str = str;
+  public CustomString() {
+    this.charArray = new char[0];
   }
 
+  public CustomString(char charArray[]) {
+    if (charArray == null) {
+      this.charArray = null;
+    } else {
+      this.charArray = new char[charArray.length];
+      System.arraycopy(charArray, 0, this.charArray, 0, charArray.length);
+    }
+  }
 
-  String valueOf(long value) {
-    return Long.toString(value);
+  public CustomString(CustomString customString) {
+    this.charArray = customString.charArray.clone();
   }
 
   char charAt(int index) {
-    char[] value = str.toCharArray();
-    return (char) (value[index] & 0xff);
-  }
-
-  int indexOf(char k) {
-    for (int i = 0; i < length(); i++) {
-      if (k == charAt(i)) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  boolean contains(String word) {
-
-    boolean contains;
-
-    for (int i = 0; i < length(); i++) {
-      contains = true;
-      if (charAt(i) == word.charAt(0)) {
-        for (int j = 1; j < word.length(); j++) {
-          if (charAt(i + 1) != word.charAt(j)) {
-            contains = false;
-          } else {
-            i++;
-          }
-        }
-        if (contains) {
-          return true;
-        }
-      } else {
-        i++;
-      }
-    }
-    return false;
-  }
-
-  String substring(int begin) {
-    StringBuilder subString = new StringBuilder();
-    for (int i = begin; i < length(); i++) {
-      subString.append(charAt(i));
-    }
-    return subString.toString();
-  }
-
-  String substring(int begin, int close) {
-    StringBuilder subString = new StringBuilder();
-    for (int i = begin; i < close; i++) {
-      subString.append(charAt(i));
-    }
-    return subString.toString();
+    return charArray[index];
   }
 
   int length() {
-    for (int len = 0; ; len++) {
-      try {
-        charAt(len);
-      } catch (ArrayIndexOutOfBoundsException ex) {
-        return len;
+    return charArray.length;
+  }
+
+  int indexOf(char c) {
+    int indexOf = -1;
+    for (int i = 0; i < charArray.length; i++) {
+      if (charAt(i) == c) {
+        return i;
       }
     }
+    return indexOf;
+  }
+
+  char[] valueOf(int i) {
+    char[] chars = ("" + i).toCharArray();
+    return chars;
   }
 
   boolean isEmpty() {
@@ -80,7 +47,29 @@ public final class CustomString {
   }
 
 
-  String trim() {
+  char[] substring(int begin) {
+    char[] substring = new char[length() - begin];
+    int j = 0;
+    for (int i = begin; i < length(); i++) {
+      substring[j] = charAt(i);
+      j++;
+    }
+    return substring;
+  }
+
+
+  char[] substring(int begin, int close) {
+    char[] substring = new char[close - begin];
+    int j = 0;
+    for (int i = begin; i < close; i++) {
+      substring[j] = charAt(i);
+      j++;
+    }
+    return substring;
+  }
+
+
+  char[] trim() {
 
     int begin = 0;
     int close = length();
@@ -102,5 +91,29 @@ public final class CustomString {
     }
     return substring(begin + 1, close - 1);
   }
+
+
+  boolean contains(char[] word) {
+
+    boolean contains;
+
+    for (int i = 0; i < length(); i++) {
+      contains = true;
+      if (charAt(i) == word[0]) {
+        for (int j = 1; j < word.length; j++) {
+          if (charAt(i + 1) != word[j]) {
+            contains = false;
+          } else {
+            i++;
+          }
+        }
+        if (contains) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 
 }
